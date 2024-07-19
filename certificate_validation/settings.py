@@ -139,3 +139,4 @@ if not DEBUG:    # Tell Django to copy static assets into a path called `staticf
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

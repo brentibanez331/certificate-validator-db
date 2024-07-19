@@ -42,19 +42,5 @@ def signup(request):
 @authentication_classes([TokenAuthentication, SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
-    print("Im not getting run")
-    return Response("passed")
+    return Response("passed from {}".format(request))
 
-
-def generate_unique_username(first_name):
-    """
-    Generate a unique username based on first_name.
-    If a user with the generated username already exists, append numbers until unique.
-    """
-    base_username = first_name.lower().replace(' ', '_')  # Convert to lowercase and replace spaces with underscores
-    username = base_username
-    num_suffix = 1
-    while User.objects.filter(username=username).exists():
-        username = f'{base_username}_{num_suffix}'
-        num_suffix += 1
-    return username
