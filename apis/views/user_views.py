@@ -37,3 +37,29 @@ def delete_user(request, person_user_id):
         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PUT', 'PATCH'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def update_user(request, person_user_id):
+    if not person_user_id:
+        return Response({'error': 'personUserId is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = CustomUser.objects.get(personUserId=person_user_id)
+        if request.method == 'PUT':
+            serializer = UserSerializer(user, data=request.data)
+        elif request.method == 'PATCH':
+            serializer = UserSerializer(user, data=request.data, partial=True)
+        else:
+            return Response({'error': 'Wrong Method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'user': serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except CustomUser.DoesNotExist:
+        return Response({'error': 'User Not Found.'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

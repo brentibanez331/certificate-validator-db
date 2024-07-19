@@ -25,5 +25,6 @@ urlpatterns = [
     re_path('test_token', auth_views.test_token),
     re_path('users/search', user_views.get_users),
     path('users/remove/<str:person_user_id>/', user_views.delete_user, name='delete_user'),
+    path('users/update/<str:person_user_id>/', user_views.update_user, name='update_user'),
     path('admin/', admin.site.urls),
 ]
