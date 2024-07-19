@@ -9,12 +9,13 @@ from apis.serializers import UserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 # from django.contrib.auth.models import User
-from apis.models.user_models import CustomUser
+from apis.models.user_models import CustomUser, generate_person_user_id
 
 from django.shortcuts import get_object_or_404
 
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
 
 @api_view(['POST'])
 def login(request):
@@ -43,4 +44,3 @@ def signup(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed from {}".format(request))
-
