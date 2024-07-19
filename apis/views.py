@@ -1,8 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import UserSerializer
 from rest_framework import status
@@ -10,6 +11,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 from django.shortcuts import get_object_or_404
+
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def login(request):
@@ -33,9 +37,13 @@ def signup(request):
         return Response({'success': True, 'token': token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def test_token(request):
-    return Response({})
+    print("Im not getting run")
+    return Response("passed")
 
 
 def generate_unique_username(first_name):
